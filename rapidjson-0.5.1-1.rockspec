@@ -1,11 +1,11 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "rapidjson"
-version = "0.5.0-1"
+version = "0.5.1-1"
 local v = version:gsub("%-%d", "")
 -- LuaDist source
 source = {
-  tag = "0.5.0-1",
+  tag = "0.5.1-1",
   url = "git://github.com/LuaDist-testing/rapidjson.git"
 }
 -- Original source
