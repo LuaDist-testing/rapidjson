@@ -292,6 +292,15 @@ The current loaded rapidjson version. `"scm"` when not build with luarocks.
 
 ## Changelog
 
+### 0.3.0
+
+* Follow integers are encoded as integers string.
+  - Lua 5.3 integers.
+  - Integers stored in double and in between:
+    - [INT64_MIN..INT64_MAX] on 64 bit Lua or
+    - [INT32_MIN..INT32_MAX] in 32 bit Lua.
+* CI scripts updated, thanks @ignacio
+
 ### 0.2.0
 
 * Rename module to `rapidjson`.
