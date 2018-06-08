@@ -7,6 +7,14 @@
 
 #include "lua.hpp"
 
+// __SSE2__ and __SSE4_2__ are recognized by gcc, clang, and the Intel compiler.
+// We use -march=native with gmake to enable -msse2 and -msse4.2, if supported.
+#if defined(__SSE4_2__)
+#  define RAPIDJSON_SSE42
+#elif defined(__SSE2__)
+#  define RAPIDJSON_SSE2
+#endif
+
 #include "rapidjson/document.h"
 #include "rapidjson/encodedstream.h"
 #include "rapidjson/encodings.h"
@@ -202,7 +210,7 @@ struct ToLuaHandler {
 		return true;
 	}
 	bool Uint(unsigned u) {
-		if (u <= std::numeric_limits<lua_Integer>::max())
+		if (u <= static_cast<unsigned>(std::numeric_limits<lua_Integer>::max()))
 			lua_pushinteger(L, static_cast<lua_Integer>(u));
 		else
 			lua_pushnumber(L, static_cast<lua_Number>(u));
@@ -218,7 +226,7 @@ struct ToLuaHandler {
 		return true;
 	}
 	bool Uint64(uint64_t u) {
-		if (u <= std::numeric_limits<lua_Integer>::max())
+		if (u <= static_cast<uint64_t>(std::numeric_limits<lua_Integer>::max()))
 			lua_pushinteger(L, static_cast<lua_Integer>(u));
 		else
 			lua_pushnumber(L, static_cast<lua_Number>(u));
@@ -324,17 +332,6 @@ static int json_load(lua_State* L)
 	fclose(fp);
 	return n;
 }
-
-struct stack_checker{
-	stack_checker(lua_State* state) : top(lua_gettop(state)), L(state) {}
-	~stack_checker() {
-		assert(lua_gettop(L) == top);
-	}
-	int top;
-private:
-	lua_State* L;
-};
-
 
 struct Key
 {
@@ -464,7 +461,10 @@ private:
 			if (isInteger(L, idx, &integer))
 				writer->Int64(integer);
 			else
-				writer->Double(lua_tonumber(L, idx));
+            {
+                if (!writer->Double(lua_tonumber(L, idx)))
+                    luaL_error(L, "error while encode double value.");
+            }
 			return;
 		case LUA_TSTRING:
 			s = lua_tolstring(L, idx, &len);
