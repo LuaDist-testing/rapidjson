@@ -1,4 +1,4 @@
-# JSON for Lua
+# RapidJSON bindings for Lua
 
 [![License](http://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 [![TrivisStatus][]][Trivis] [![AppVeyorStatus][]][AppVeyor]
@@ -53,7 +53,7 @@ Decode json to lua table.
 #### Synopsis
 
 ```Lua
-value = rapidjson.encode(jsonstring)
+value = rapidjson.decode(jsonstring)
 ```
 
 #### Arguments
@@ -131,7 +131,7 @@ Return nil on failure, plus an error message as a second result.
 #### Examples
 
 ```Lua
-local json = require('rapidjson')
+local rapidjson = require('rapidjson')
 
 rapidjson.encode({})     -- '{}'
 
@@ -230,7 +230,7 @@ Return false plus an error message as a second result when:
 #### Example
 
 ```Lua
-local json = require('json')
+local rapidjson = require('rapidjson')
 
 rapidjson.dump({rapidjson.null}, 'test.json')
 rapidjson.dump({rapidjson.null}, 'test-pretty.json', {pretty=true})
@@ -244,7 +244,7 @@ The placeholder for null values in rapidjson.
 eg.
 
 ```Lua
-local json = require('json')
+local rapidjson = require('rapidjson')
 
 rapidjson.decode('[null]') --> {rapidjson.null}
 rapidjson.encode({rapidjson.null}) --> '[null]'
@@ -306,8 +306,8 @@ The current loaded rapidjson version. `"scm"` when not build with luarocks.
 
 
 [RapidJSON]: https://github.com/miloyip/rapidjson
-[homepage]: https://github.com/xpol/rapidjson
-[Trivis]: https://travis-ci.org/xpol/rapidjson "Travis page"
-[TrivisStatus]: https://travis-ci.org/xpol/rapidjson.png
-[AppVeyor]: https://ci.appveyor.com/project/xpol/rapidjson/branch/master "AppVeyor page"
-[AppVeyorStatus]: https://ci.appveyor.com/api/projects/status/qrihavtrvqnv00bu/branch/master?svg=true
+[homepage]: https://github.com/xpol/lua-rapidjson
+[Trivis]: https://travis-ci.org/xpol/lua-rapidjson "Travis page"
+[TrivisStatus]: https://travis-ci.org/xpol/lua-rapidjson.svg
+[AppVeyor]: https://ci.appveyor.com/project/xpol/lua-rapidjson/branch/master "AppVeyor page"
+[AppVeyorStatus]: https://ci.appveyor.com/api/projects/status/oa3s51dkatevg81o/branch/master?svg=true

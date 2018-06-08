@@ -1,16 +1,16 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "rapidjson"
-version = "0.2.1-1"
+version = "0.2.2-1"
 -- LuaDist source
 source = {
-  tag = "0.2.1-1",
+  tag = "0.2.2-1",
   url = "git://github.com/LuaDist-testing/rapidjson.git"
 }
 -- Original source
 -- source = {
 --   url = 'git://github.com/xpol/rapidjson',
---   tag = 'v0.2.1'
+--   tag = 'v0.2.2-1'
 -- }
 
 description = {
@@ -49,7 +49,7 @@ build = {
   platforms = {
     windows = {
       variables = {
-        LUA_LIBRARIES = "$(LUA_LIBDIR)$(LUALIB)", -- windows DLL needs link with importlib.
+        LUA_LIBRARIES = "$(LUA_LIBDIR)/$(LUALIB)", -- windows DLL needs link with importlib.
       }
     }
   }
