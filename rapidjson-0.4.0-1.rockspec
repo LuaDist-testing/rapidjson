@@ -1,16 +1,17 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "rapidjson"
-version = "0.3.1-1"
+version = "0.4.0-1"
+local v = version:gsub("%-%d", "")
 -- LuaDist source
 source = {
-  tag = "0.3.1-1",
+  tag = "0.4.0-1",
   url = "git://github.com/LuaDist-testing/rapidjson.git"
 }
 -- Original source
 -- source = {
 --    url = "git://github.com/xpol/lua-rapidjson",
---    tag = "v0.3.1"
+--    tag = "v"..v
 -- }
 description = {
    summary = "Very fast json module based on RapidJSON.",
@@ -45,6 +46,6 @@ build = {
       BUILD_SHARED_LIBS = "ON",
       CMAKE_INSTALL_PREFIX = "$(PREFIX)",
       LUA_INCLUDE_DIR = "$(LUA_INCDIR)",
-      LUA_RAPIDJSON_VERSION = version:gsub("%-%d", "")
+      LUA_RAPIDJSON_VERSION = v
    }
 }

@@ -27,8 +27,19 @@ rapidjson.load()
 rapidjson.dump()
 ```
 
-## Test
+## Value Type Mappings
 
+Lua Type          | JSON type    | Notes
+------------------|--------------|----------------------
+`rapidjson.null`  |`null`        |
+`true`            |`true`        |
+`false`           |`false`       |
+string            |string        |
+table             |array         |when meta field `__jsontype` is `'array'` or no `__jsontype` meta filed and table length > 0
+table             |object        |when not an array, all non string keys and its values are ignored.
+number            |number        |
+
+## Test
 
 Clone or download source code, in the project root folder:
 
@@ -83,7 +94,7 @@ Encode lua table to json string.
 supports the following types:
 
 * boolean
-* function (rapidjson.null only)
+* rapidjson.null (it is actually a function)
 * number
 * string
 * table
@@ -102,10 +113,10 @@ string = rapidjson.encode(value [, option])
 
 When passed a table:
 
-1. Trade as array if:
-    - metatable field `__jsontype` set to `array`.
-    - table contains only integer keys from 1 to n.
-2. Otherwise the table are trade as object and integer keys are converted to string.
+1. it is encoded as json array if:
+    - meta field `__jsontype` set to `array`.
+    - table contains length > 0.
+2. otherwise the table is encoded as json object and non string keys and its values are ignored.
 
 When passed with `true`, `false`, number and `rapidjson.null`, simply encode as simple json value.
 
@@ -258,7 +269,7 @@ Create a new empty table that have metatable field `__jsontype` set as `'object'
 When passed an valid table:
 
 * Passed table do not have metatable, just set above metatable for the table.
-* Passed table already have metatable, just the the metatable field `__jsontype` to 'object'.
+* Passed table already have metatable, set the metatable field `__jsontype` to 'object'.
 
 #### Synopsis
 
@@ -270,7 +281,7 @@ obj = rapidjson.object([t])
 
 *t*
 
-Optinal table to be set the metatable with meta field `__jsontype` set as `'object'`.
+Optional table to be set the metatable with meta field `__jsontype` set as `'object'`.
 
 #### Returns
 
@@ -290,11 +301,27 @@ A string that is `"rapidjson"`.
 
 The current loaded rapidjson version. `"scm"` when not build with luarocks.
 
+## Release Steps
+
+1. Pass all unit tests.
+2. Update version in rapidjson-*.*.*-1.rockspec and update the name of the rockspec file.
+3. Tag source code with that version (*.*.*), and push.
+4. `luarocks upload rapidjson-*.*.*-1.rockspec`
+
 ## Changelog
+
+### 0.4.0
+
+* Checks circular reference when encoding tables.
+* A table is encoded as json array if:
+  - have meta field `__jsontype` set to `'array'`.
+  - don't have meta filed `__jsontype` and length > 0.
+* When table is encoded as json object, **only string keys and its values are encoded**.
+* Integers are decoded to lua_Integer if it can be stored in lua_Integer.
 
 ### 0.3.0
 
-* Follow integers are encoded as integers string.
+* Follow integers are encoded as integers.
   - Lua 5.3 integers.
   - Integers stored in double and in between:
     - [INT64_MIN..INT64_MAX] on 64 bit Lua or
@@ -306,7 +333,7 @@ The current loaded rapidjson version. `"scm"` when not build with luarocks.
 * Rename module to `rapidjson`.
 * Added `option.sort_keys` option to `rapidjson.encode()` and `rapidjson.dump()`, and default value for `sort_keys` is `false`.
 * Added `rapidjson._NAME` (`"rapidjson"`) and `rapidjson._VERSION`.
-* `rapidjson.object()` and `rapidjson.array()` just set metatable field `__jsontype` to `'object'` and `'array'` it passed table already have a metatable.
+* `rapidjson.object()` and `rapidjson.array()` just set metatable field `__jsontype` to `'object'` and `'array'` if passed table already have a metatable.
 * fixes dump return value of `false` rather than `nil`.
 
 ### 0.1.0
